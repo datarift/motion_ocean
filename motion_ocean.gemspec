@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["erwin@datarift.nl"]
   spec.summary       = %q{Digital Ocean API implementation for RubyMotion}
   spec.description   = %q{MotionOcean, for RubyMotion, is an implementation of v2 of the Digital Ocean API}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/datarift/motion_ocean"
   spec.license       = "MIT"
 
   spec.files         = Dir.glob('lib/**/*.rb')
@@ -18,11 +18,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = Dir.glob('spec/**/*.rb')
   spec.require_paths = ["lib"]
   
-  spec.add_dependency 'dbt'
-  spec.add_dependency 'afmotion'
+  spec.add_runtime_dependency 'dbt', '~> 1.1', '>= 1.1.0'
+  spec.add_runtime_dependency 'afmotion', '~> 2.3', '>= 2.3.0'
   
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'webstub'
-  spec.add_development_dependency 'motion-redgreen'
-  spec.add_development_dependency 'bacon-expect'
+  spec.add_development_dependency 'rake', '~> 10.3', '>= 10.3.0'
+  spec.add_development_dependency 'webstub', '~> 1.0', '>= 1.0.0'
+  spec.add_development_dependency 'motion-redgreen', '~> 0.1', '>= 0.1.0'
+  spec.add_development_dependency 'bacon-expect', '~> 1.0', '>= 1.0.0'
 end
