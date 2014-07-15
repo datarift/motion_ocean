@@ -66,6 +66,10 @@ end
 ```
 [afmotion]: https://github.com/usepropellor/afmotion
 
+## Aknowledgements
+
+This library is an adaptation for RubyMotion of [barge](https://github.com/boats/barge) by [Ørjan Blom](https://github.com/blom). 
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/motion_ocean/fork )
