@@ -1,5 +1,7 @@
 # MotionOcean
 
+[![Gem Version](https://badge.fury.io/rb/motion_ocean.svg)](http://badge.fury.io/rb/motion_ocean)
+
 RubyMotion library for [version 2 of DigitalOcean's API](https://developers.digitalocean.com/v2/)
 
 **Please note that version 2 of DigitalOcean's API is in beta, and is still
