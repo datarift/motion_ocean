@@ -16,7 +16,6 @@ rescue LoadError
 end
 
 require 'motion-redgreen'
-require 'webstub'
 require 'bacon-expect'
 
 Motion::Project::App.setup do |app|
