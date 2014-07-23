@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   
   spec.add_runtime_dependency 'dbt', '~> 1.1', '>= 1.1.0'
-  spec.add_runtime_dependency 'afmotion', '~> 2.3', '>= 2.3.0'
   
   spec.add_development_dependency 'rake', '~> 10.3', '>= 10.3.0'
   spec.add_development_dependency 'motion-redgreen', '~> 0.1', '>= 0.1.0'

@@ -32,15 +32,11 @@ module MotionOcean
     end
     
     def api_client
-      @api_client ||= AFMotion::SessionClient.build(DIGITAL_OCEAN_URL) do |client|
-        client.session_configuration :default
-        
+      @api_client ||= MotionOcean::API::Client.new(DIGITAL_OCEAN_URL) do |client|
         client.header 'Accept', 'application/json'
         client.header 'Content-Type', 'application/json'
-        client.header 'Authorization', "Bearer #{access_token}"
         
-        client.request_serializer :json
-        client.response_serializer :json
+        client.authorization token: access_token, token_name: 'Bearer'
       end
     end
   end
