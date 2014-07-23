@@ -25,6 +25,8 @@ module MotionOcean
       @action  = Resource::Action.new(api_client)
       @domain  = Resource::Domain.new(api_client)
       @droplet = Resource::Droplet.new(api_client)
+      @image   = Resource::Image.new(api_client)
+      @key     = Resource::Key.new(api_client)
       @region  = Resource::Region.new(api_client)
       @size    = Resource::Size.new(api_client)
     end
