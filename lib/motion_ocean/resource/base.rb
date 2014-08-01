@@ -21,13 +21,7 @@ module MotionOcean
         opts = { per_page: PER_PAGE } if verb == :get
         options = opts.merge(options)
         
-        api_client.public_send(verb, url, options) do |response|
-          data = response.object.tap do |r|
-            r.define_singleton_method(:response) { response }
-            r.define_singleton_method(:success?) { response.success? }
-          end
-          block.call(data)
-        end
+        api_client.public_send(verb, url, options, &block)
       end
     end
   end

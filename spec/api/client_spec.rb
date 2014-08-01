@@ -32,8 +32,9 @@ describe "MotionOcean::API::Client" do
     
     headers.should != nil
     headers.empty?.should == false
-    headers.first[:name].should == 'Accept'
-    headers.first[:value].should == 'application/json'
+    headers.should.be.kind_of Hash
+    headers.include?('Accept').should == true
+    headers['Accept'].should == 'application/json'
   end
   
   it "sets authorization headers" do
@@ -46,7 +47,7 @@ describe "MotionOcean::API::Client" do
     headers.should != nil
     headers.empty?.should == false
     
-    headers.first[:name].should == 'Authorization'
-    headers.first[:value].should == "Token #{@token}"
+    headers.include?('Authorization').should == true
+    headers['Authorization'].should == "Token #{@token}"
   end
 end

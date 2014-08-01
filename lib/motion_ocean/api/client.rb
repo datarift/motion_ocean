@@ -6,7 +6,7 @@ module MotionOcean
       def initialize(base_url, &block)
         base_url += '/' unless base_url.end_with? '/'
         @base_url = NSURL.URLWithString(base_url)
-        @headers = []
+        @headers = {}
       
         # yield(self) if block_given?
         if block_given?
@@ -18,37 +18,16 @@ module MotionOcean
           end
         end
       end
-    
-      def get(path, &block)
-        request = create_request(path, :get)
-        create_task(request, &block).resume
-      end
-    
-      def delete(path, &block)
-        request = create_request(path, :get)
-        create_task(request, &block).resume
-      end
       
-      def post(path, params, &block)
-        request = create_request(path, :post)
-        add_params(request, params)
-        create_task(request, &block).resume
-      end
-    
-      def put(path, params, &block)
-        request = create_request(path, :post)
-        add_params(request, params)
-        create_task(request, &block).resume
-      end
-    
-      def head(path, params = {}, &block)
-        request = create_request(path, :post)
-        add_params(request, params)
-        create_task(request, &block).resume
+      [:delete, :get, :head, :post, :put].each do |verb|
+        define_method verb do |path, options = {}, &block|
+          request = create_request(path, options, verb)
+          create_task(request, &block).resume
+        end
       end
       
       def header(name, value)
-        @headers << { name: name, value: value }
+        @headers[name] = value
       end
     
       def authorization(options = {})
@@ -64,21 +43,41 @@ module MotionOcean
         NSURLSession.sessionWithConfiguration(config)
       end
     
-      def create_request(path, method)
-        url = NSURL.URLWithString(path, relativeToURL: @base_url)
+      def create_request(path, options, method)
+        headers = options.fetch(:headers, {})
+        body = options.fetch(:body, nil)
+        query = options.fetch(:query, nil)
+
+        url = create_url(path, query)
         
         request = NSMutableURLRequest.requestWithURL(url)
         
-        @headers.each do |header|
-          request.addValue header[:value], forHTTPHeaderField: header[:name]
-        end
+        set_headers(request, @headers.merge(headers))
+        set_body(request, body) if body
         
         request.setHTTPMethod(method.to_s.upcase)
         
         request
       end
       
-      def add_params(request, params)
+      def create_url(path, query)
+        query_string = query.map { |key, value| "#{key}=#{value}" }.join '&' unless query.nil?
+        
+        path.sub!('/', '') if path.start_with? '/'
+        
+        components = NSURLComponents.new
+        components.path = path
+        components.query = query_string
+        components.URLRelativeToURL @base_url
+      end
+      
+      def set_headers(request, headers)
+        headers.each do |name, value|
+          request.addValue value.to_s, forHTTPHeaderField: name.to_s
+        end
+      end
+      
+      def set_body(request, params)
         data = json_params(params)
         request.setHTTPBody(data)
       end
@@ -98,11 +97,12 @@ module MotionOcean
       end
       
       class APIResponse
-        attr_reader :success, :data, :error
+        attr_reader :success, :data, :error, :response
 
         def initialize(data, response, error)
-          @success = (200...300).include?(response.statusCode)
+          @success = (200...300).include?(response.statusCode) if response
           @data = NSJSONSerialization.JSONObjectWithData(data, options: 0, error: nil)
+          @response = response
           @error = error
         end
 

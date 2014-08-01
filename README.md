@@ -42,11 +42,13 @@ end
 
 ### Usage
 
-Since MotionOcean is based on [AFMotion][afmotion], requests are being made asynchronous. Every MotionOcean method call therefore requires a block, which yields the data (or nil if the request failed).
+The API client is based on NSURLSession and every request is executed asynchronously. Every MotionOcean method call therefore requires a block, which yields a `MotionOcean::API::Response`.
 
 MotionOcean pretty much implements the DO API 1:1, so please check [their documentation](https://developers.digitalocean.com/v2/) for the available functions and options.
 
-### success?
+### The response object
+
+#### success?
 
 You can use `success?` to check if a successful HTTP status code was returned:
 
@@ -56,25 +58,41 @@ client.droplet.create(options) do |result|
 end
 ```
 
-### response
+#### data
 
-MotionOcean uses [AFMotion][afmotion]. You can use `response` to get to the response
+The response data is assigned to the `data`-property of the response object. This is a `Hash` which 
+corresponds with the returned JSON by DigitalOcean.
+
+``` ruby
+client.droplet.create(options) do |result|
+  result.data # => Hash with the JSON response
+end
+```
+
+
+#### response
+
+MotionOcean uses NSURLSession. You can use `response` to get to the original response
 object:
 
 ``` ruby
 client.droplet.create(options) do |result|
-  result.response # => AFMotion::HTTPResult
+  result.response # => NSHTTPURLResponse
 end
 ```
-[afmotion]: https://github.com/usepropellor/afmotion
+#### error
+
+When there is an error you can check this for the specific error. If you think it is a bug in MotionOcean, please open an issue or even better: submit a Pull Request with the fix!
 
 ## Aknowledgements
 
 This library is an adaptation for RubyMotion of [barge](https://github.com/boats/barge) by [Ørjan Blom](https://github.com/blom). 
 
+The brilliant [MotionInMotion](https://motioninmotion.tv) screencasts helped me with implementing the API client using NSURLSession (specifically [episode #33](https://motioninmotion.tv/screencasts/33)) and iOS development using RubyMotion in general.
+
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/motion_ocean/fork )
+1. Fork it ( https://github.com/datarift/motion_ocean/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
